@@ -1,0 +1,8 @@
+ spring:
+  h2.console:
+    enabled: true
+    path: '/console'
+  datasource:
+   url: 'jdbc:h2:file:./tasks-db'
+   username=: 'ocz'
+  jpa.hibernate.ddl-auto: create-drop

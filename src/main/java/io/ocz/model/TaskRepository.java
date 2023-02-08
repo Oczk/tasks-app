@@ -1,4 +1,4 @@
-package io.ocz.model.task;
+package io.ocz.model;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

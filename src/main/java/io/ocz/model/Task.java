@@ -1,4 +1,4 @@
-package io.ocz.model.task;
+package io.ocz.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tasks")
-public class Task {
+public class Task extends BaseAuditableAudity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -47,5 +47,11 @@ public class Task {
 
     public void setDeadline(LocalDateTime deadline) {
         this.deadline = deadline;
+    }
+
+    public void updateFrom(final Task source) {
+        description = source.description;
+        done = source.done;
+        deadline = source.deadline;
     }
 }

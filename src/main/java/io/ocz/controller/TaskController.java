@@ -1,7 +1,7 @@
 package io.ocz.controller;
 
 import io.ocz.model.Task;
-import io.ocz.model.repository.TaskRepository;
+import io.ocz.model.contract.TaskRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;

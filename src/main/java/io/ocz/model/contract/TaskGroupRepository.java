@@ -1,4 +1,4 @@
-package io.ocz.model.repository;
+package io.ocz.model.contract;
 
 import io.ocz.model.TaskGroup;
 
@@ -11,6 +11,8 @@ public interface TaskGroupRepository {
 
     Optional<TaskGroup> findById(Integer id);
 
-    TaskGroup save (TaskGroup entity);
+    TaskGroup save(TaskGroup entity);
+
+    boolean existsByDoneIsFalseAndProject_Id(Integer projectId);
 
 }

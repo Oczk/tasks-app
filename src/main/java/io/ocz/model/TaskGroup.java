@@ -1,9 +1,6 @@
 package io.ocz.model;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Set;
 
 @Entity
@@ -12,6 +9,18 @@ public class TaskGroup extends BaseTask {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "group")
     private Set<Task> tasks;
+
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    private Project project;
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
 
     public TaskGroup() {
     } //for Hibernate

@@ -1,4 +1,4 @@
-package io.ocz.model.repository;
+package io.ocz.model.contract;
 
 import io.ocz.model.Task;
 import org.springframework.data.domain.Page;

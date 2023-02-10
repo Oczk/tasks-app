@@ -1,7 +1,7 @@
 package io.ocz.adapter;
 
 import io.ocz.model.Task;
-import io.ocz.model.repository.TaskRepository;
+import io.ocz.model.contract.TaskRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

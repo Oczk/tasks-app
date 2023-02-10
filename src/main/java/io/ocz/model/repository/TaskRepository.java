@@ -1,5 +1,6 @@
-package io.ocz.model;
+package io.ocz.model.repository;
 
+import io.ocz.model.Task;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
@@ -15,6 +16,8 @@ public interface TaskRepository {
     Optional<Task> findById(Integer id);
 
     boolean existsById(Integer id);
+
+    boolean existsByDoneIsFalseAndGroup_Id(Integer groupId);
 
     List<Task> findByDone(@Param("state") boolean done);
 

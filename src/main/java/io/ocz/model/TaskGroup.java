@@ -14,6 +14,9 @@ public class TaskGroup extends BaseTask {
     @JoinColumn(name = "project_id")
     private Project project;
 
+    public TaskGroup() {
+    } //for Hibernate
+
     public Project getProject() {
         return project;
     }
@@ -21,9 +24,6 @@ public class TaskGroup extends BaseTask {
     public void setProject(Project project) {
         this.project = project;
     }
-
-    public TaskGroup() {
-    } //for Hibernate
 
     public Set<Task> getTasks() {
         return tasks;

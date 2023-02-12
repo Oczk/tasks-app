@@ -3,8 +3,8 @@ package io.ocz.logic;
 import io.ocz.model.TaskGroup;
 import io.ocz.model.contract.TaskGroupRepository;
 import io.ocz.model.contract.TaskRepository;
-import io.ocz.model.projection.GroupReadModel;
-import io.ocz.model.projection.GroupWriteModel;
+import io.ocz.model.projection.read.GroupReadModel;
+import io.ocz.model.projection.write.GroupWriteModel;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

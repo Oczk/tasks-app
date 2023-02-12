@@ -1,4 +1,4 @@
-package io.ocz.model.projection;
+package io.ocz.model.projection.write;
 
 import io.ocz.model.Task;
 

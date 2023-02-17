@@ -3,17 +3,18 @@ package io.ocz.logic;
 import io.ocz.TaskConfigurationProperties;
 import io.ocz.model.Project;
 import io.ocz.model.ProjectStep;
-import io.ocz.model.TaskGroup;
 import io.ocz.model.contract.ProjectRepository;
 import io.ocz.model.contract.TaskGroupRepository;
 import io.ocz.model.projection.read.GroupReadModel;
+import io.ocz.object.TaskGroupRepositories;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -100,7 +101,7 @@ class ProjectServiceTest {
         var project = projectWith("bar", Set.of(1, 2));
         when(projectRepository.findById(anyInt()))
                 .thenReturn(Optional.of(project));
-        InMemoryGroupRepository inMemoryGroupRepository = inMemoryGroupRepository();
+        TaskGroupRepository inMemoryGroupRepository = TaskGroupRepositories.getInstance().createTaskGroupRepository();
         sut = new ProjectService(projectRepository, inMemoryGroupRepository, config);
         var today = LocalDate.now().atStartOfDay();
 
@@ -137,39 +138,5 @@ class ProjectServiceTest {
         when(config.getTemplate()).thenReturn(configTemplate);
     }
 
-    private InMemoryGroupRepository inMemoryGroupRepository() {
-        return new InMemoryGroupRepository();
-    }
-
-    private static class InMemoryGroupRepository implements TaskGroupRepository {
-        private int index = 0;
-        private final Map<Integer, TaskGroup> map = new HashMap<>();
-
-        @Override
-        public List<TaskGroup> findAll() {
-            return new ArrayList<>(map.values());
-        }
-
-        @Override
-        public Optional<TaskGroup> findById(Integer id) {
-            return Optional.ofNullable(map.get(id));
-        }
-
-        @Override
-        public TaskGroup save(TaskGroup entity) {
-            if (entity.getId() == 0) {
-                entity.setId(++index);
-            }
-            map.put(entity.getId(), entity);
-            return entity;
-        }
-
-        @Override
-        public boolean existsByDoneIsFalseAndProject_Id(Integer projectId) {
-            return map.values().stream()
-                    .filter(group -> !group.isDone())
-                    .anyMatch(group -> group.getProject() != null && group.getProject().getId() == projectId);
-        }
-    }
 
 }

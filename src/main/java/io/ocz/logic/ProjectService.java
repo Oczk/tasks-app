@@ -61,7 +61,8 @@ public class ProjectService {
                                 return task;
                             })
                             .collect(Collectors.toSet()));
-                    return group;
+                    group.setProject(project);
+                    return groupRepository.save(group);
                 })
                 .orElseThrow(() -> new IllegalArgumentException("Project with given id was not found"));
         return new GroupReadModel(result);

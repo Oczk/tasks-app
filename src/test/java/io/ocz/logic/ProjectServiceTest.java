@@ -1,11 +1,10 @@
 package io.ocz.logic;
 
 import io.ocz.TaskConfigurationProperties;
-import io.ocz.model.Project;
-import io.ocz.model.ProjectStep;
 import io.ocz.model.contract.ProjectRepository;
 import io.ocz.model.contract.TaskGroupRepository;
 import io.ocz.model.projection.read.GroupReadModel;
+import io.ocz.object.Projects;
 import io.ocz.object.TaskGroupRepositories;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,7 +14,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -98,7 +96,7 @@ class ProjectServiceTest {
     void createGroup_configurationOk_createsAndSavesGroup() {
         //given
         configurationReturning(true);
-        var project = projectWith("bar", Set.of(1, 2));
+        var project = Projects.projectWith("bar", Set.of(1, 2));
         when(projectRepository.findById(anyInt()))
                 .thenReturn(Optional.of(project));
         TaskGroupRepository inMemoryGroupRepository = TaskGroupRepositories.getInstance().createTaskGroupRepository();
@@ -112,21 +110,6 @@ class ProjectServiceTest {
         assertThat(result.getDescription()).isEqualTo("bar");
         assertThat(result.getDeadline()).isEqualTo(today.minusDays(1));
         assertThat(result.getTasks()).allMatch(task -> task.getDescription().equals("foo"));
-    }
-
-    private Project projectWith(String projectDescription, Set<Integer> daysToDeadline) {
-        var result = mock(Project.class);
-        when(result.getDescription()).thenReturn(projectDescription);
-        var steps = daysToDeadline.stream()
-                .map(days -> {
-                    var step = mock(ProjectStep.class);
-                    when(step.getDescription()).thenReturn("foo");
-                    when(step.getDaysToDeadline()).thenReturn(days);
-                    return step;
-                })
-                .collect(Collectors.toSet());
-        when(result.getSteps()).thenReturn(steps);
-        return result;
     }
 
     private void groupRepositoryReturning(final boolean result) {

@@ -13,7 +13,7 @@ public class BaseTask {
     protected String description;
     protected boolean done;
     @Embedded
-    private Audit audit = new Audit(); //Composition over inheritance
+    private Audit audit = new Audit();
 
     public int getId() {
         return id;

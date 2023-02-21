@@ -9,13 +9,11 @@ import io.ocz.model.contract.TaskGroupRepository;
 import io.ocz.model.projection.read.GroupReadModel;
 import io.ocz.model.projection.read.ProjectReadModel;
 import io.ocz.model.projection.write.ProjectWriteModel;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
 public class ProjectService {
 
     private final ProjectRepository repository;

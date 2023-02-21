@@ -5,12 +5,10 @@ import io.ocz.model.contract.TaskGroupRepository;
 import io.ocz.model.contract.TaskRepository;
 import io.ocz.model.projection.read.GroupReadModel;
 import io.ocz.model.projection.write.GroupWriteModel;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
 public class TaskGroupService {
     private TaskGroupRepository groupRepository;
     private TaskRepository taskRepository;
@@ -32,7 +30,7 @@ public class TaskGroupService {
     }
 
     public void toggleGroup(int groupId) {
-        if(taskRepository.existsByDoneIsFalseAndGroup_Id(groupId)) {
+        if (taskRepository.existsByDoneIsFalseAndGroup_Id(groupId)) {
             throw new IllegalStateException("Group has undone tasks. Done all tasks first");
         }
         TaskGroup result = groupRepository.findById(groupId).orElseThrow(

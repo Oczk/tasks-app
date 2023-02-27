@@ -2,11 +2,11 @@ package io.ocz.model.projection.read;
 
 import io.ocz.model.Task;
 
-public class GroupTaskReadModel {
+public class TaskReadModel {
     private boolean done;
     private String description;
 
-    public GroupTaskReadModel(Task source) {
+    public TaskReadModel(Task source) {
         description = source.getDescription();
         done = source.isDone();
     }

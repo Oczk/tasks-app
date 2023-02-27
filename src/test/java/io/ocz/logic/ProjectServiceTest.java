@@ -44,7 +44,7 @@ class ProjectServiceTest {
         //given
         groupRepositoryReturning(true);
         configurationReturning(false);
-        sut = new ProjectService(null, taskGroupRepository, config);
+        sut = new ProjectService(null, taskGroupRepository, null, config);
 
         //when
         var exception = catchThrowable(() -> sut.createGroup(0, LocalDateTime.now()));
@@ -61,7 +61,7 @@ class ProjectServiceTest {
         //given
         configurationReturning(true);
         when(projectRepository.findById(anyInt())).thenReturn(Optional.empty());
-        sut = new ProjectService(projectRepository, taskGroupRepository, config);
+        sut = new ProjectService(projectRepository, taskGroupRepository, null, config);
 
         //when
         var exception = catchThrowable(() -> sut.createGroup(0, LocalDateTime.now()));
@@ -80,7 +80,7 @@ class ProjectServiceTest {
         configurationReturning(true);
         groupRepositoryReturning(false);
         when(projectRepository.findById(anyInt())).thenReturn(Optional.empty());
-        sut = new ProjectService(projectRepository, taskGroupRepository, config);
+        sut = new ProjectService(projectRepository, taskGroupRepository, null, config);
 
         //when
         var exception = catchThrowable(() -> sut.createGroup(0, LocalDateTime.now()));
@@ -100,7 +100,8 @@ class ProjectServiceTest {
         when(projectRepository.findById(anyInt()))
                 .thenReturn(Optional.of(project));
         TaskGroupRepository inMemoryGroupRepository = TaskGroupRepositories.getInstance().createTaskGroupRepository();
-        sut = new ProjectService(projectRepository, inMemoryGroupRepository, config);
+        var taskGroupService = dummyTaskGroupService(inMemoryGroupRepository);
+        sut = new ProjectService(projectRepository, inMemoryGroupRepository, taskGroupService, config);
         var today = LocalDate.now().atStartOfDay();
 
         //when
@@ -110,6 +111,10 @@ class ProjectServiceTest {
         assertThat(result.getDescription()).isEqualTo("bar");
         assertThat(result.getDeadline()).isEqualTo(today.minusDays(1));
         assertThat(result.getTasks()).allMatch(task -> task.getDescription().equals("foo"));
+    }
+
+    private static TaskGroupService dummyTaskGroupService(TaskGroupRepository inMemoryGroupRepository) {
+        return new TaskGroupService(inMemoryGroupRepository, null);
     }
 
     private void groupRepositoryReturning(final boolean result) {

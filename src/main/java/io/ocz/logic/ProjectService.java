@@ -2,13 +2,13 @@ package io.ocz.logic;
 
 import io.ocz.TaskConfigurationProperties;
 import io.ocz.model.Project;
-import io.ocz.model.Task;
-import io.ocz.model.TaskGroup;
 import io.ocz.model.contract.ProjectRepository;
 import io.ocz.model.contract.TaskGroupRepository;
 import io.ocz.model.projection.read.GroupReadModel;
 import io.ocz.model.projection.read.ProjectReadModel;
+import io.ocz.model.projection.write.GroupWriteModel;
 import io.ocz.model.projection.write.ProjectWriteModel;
+import io.ocz.model.projection.write.TaskWriteModel;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,16 +17,17 @@ import java.util.stream.Collectors;
 public class ProjectService {
 
     private final ProjectRepository repository;
-
     private final TaskGroupRepository groupRepository;
-
+    private final TaskGroupService taskGroupService;
     private final TaskConfigurationProperties config;
 
     public ProjectService(final ProjectRepository repository,
                           TaskGroupRepository groupRepository,
+                          TaskGroupService taskGroupService,
                           TaskConfigurationProperties properties) {
         this.repository = repository;
         this.groupRepository = groupRepository;
+        this.taskGroupService = taskGroupService;
         this.config = properties;
     }
 
@@ -47,23 +48,21 @@ public class ProjectService {
             throw new IllegalStateException("Only one undone group from project is allowed");
         }
 
-        TaskGroup result = repository.findById(projectId)
+        return repository.findById(projectId)
                 .map(project -> {
-                    TaskGroup group = new TaskGroup();
-                    group.setDescription(project.getDescription());
-                    group.setTasks(project.getSteps().stream()
+                    var groupDTO = new GroupWriteModel();
+                    groupDTO.setDescription(project.getDescription());
+                    groupDTO.setTasks(project.getSteps().stream()
                             .map(s -> {
-                                Task task = new Task();
+                                var task = new TaskWriteModel();
                                 task.setDeadline(deadline.minusDays(s.getDaysToDeadline()));
                                 task.setDescription(s.getDescription());
                                 return task;
                             })
                             .collect(Collectors.toSet()));
-                    group.setProject(project);
-                    return groupRepository.save(group);
+                    return taskGroupService.createGroup(groupDTO);
                 })
                 .orElseThrow(() -> new IllegalArgumentException("Project with given id was not found"));
-        return new GroupReadModel(result);
     }
 
 }

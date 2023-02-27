@@ -1,10 +1,11 @@
 package io.ocz.model.projection.write;
 
 import io.ocz.model.Task;
+import io.ocz.model.TaskGroup;
 
 import java.time.LocalDateTime;
 
-public class GroupTaskWriteModel {
+public class TaskWriteModel {
     private String description;
     private LocalDateTime deadline;
 
@@ -24,7 +25,7 @@ public class GroupTaskWriteModel {
         this.deadline = deadline;
     }
 
-    public Task toTask() {
-        return new Task(description, deadline);
+    public Task toTask(TaskGroup group) {
+        return new Task(description, deadline, group);
     }
 }
